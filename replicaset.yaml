@@ -3,7 +3,7 @@ kind: ReplicaSet
 metadata:
   name: cicd-app-rs
 spec:
-  replicas: 3
+  replicas: 5
   selector:
     matchLabels:
       app: cicd-app
@@ -16,4 +16,4 @@ spec:
       - name: cicd-app
         image: kushal81/cicd-app:v9
         ports:
-        - containerPort: 3000
+        - containerPort: 3030
