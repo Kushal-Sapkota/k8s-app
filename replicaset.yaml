@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: cicd-app-rs
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: cicd-app
+  template:
+    metadata:
+      labels:
+        app: cicd-app
+    spec:
+      containers:
+      - name: cicd-app
+        image: kushal81/cicd-app:v9
+        ports:
+        - containerPort: 3000
