@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cicd-app-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: cicd-app-deploy
+  strategy:
+    type: RollingUpdate         //Can be used blue-green deployment or canary deployment(which would require tools like isto or argo)
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  template:
+    metadata:
+      labels:
+        app: cicd-app-deploy
+    spec:
+      containers:
+      - name: cicd-app
+        image: kushal81/cicd-app:v9
+        ports:
+        - containerPort: 3000
