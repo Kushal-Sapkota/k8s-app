@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: cicd-app
+  labels:
+    app: cicd-app
+spec:
+  containers:
+  - name: cicd-app
+    image: kushal81/cicd-app:v9
+    ports:
+    - containerPort: 3000
