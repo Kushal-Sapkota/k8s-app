@@ -16,6 +16,8 @@ Hands-on Kubernetes practice deploying a Node.js app on a local cluster using Mi
 
 - `pod.yaml` — single container pod
 - `multi-pod.yaml` — app + sidecar logging container
+- `replicaset.yaml` — maintains 3 pod replicas, self healing
+- `deployment.yaml` — rolling update strategy, ropllback support
 
 ---
 
