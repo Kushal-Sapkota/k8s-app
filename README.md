@@ -20,6 +20,7 @@ Hands-on Kubernetes practice deploying a Node.js app on a local cluster using Mi
 - `deployment.yaml` — rolling update strategy, rollback support
 - `service.yaml` — NodePort Service, load balances across deployment pods, exposed on the port 30001
 - `secret.yaml` — Stores sensitive data(never pushed to the github)
+- `configmap.yaml` — Stores non-sensitive configuration data in keyvalue pairs
 ---
 
 ## Run it
