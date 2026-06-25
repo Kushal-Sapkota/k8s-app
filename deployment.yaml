@@ -8,7 +8,7 @@ spec:
     matchLabels:
       app: cicd-app-deploy
   strategy:
-    type: RollingUpdate         //Can be used blue-green deployment or canary deployment(which would require tools like isto or argo)
+    type: RollingUpdate
     rollingUpdate:
       maxSurge: 1
       maxUnavailable: 1
