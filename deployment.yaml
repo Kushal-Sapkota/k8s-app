@@ -22,3 +22,14 @@ spec:
         image: kushal81/cicd-app:v9
         ports:
         - containerPort: 3000
+        env:
+          - name: DB_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: db-secret
+                key: username
+          - name: DB_PASSWORD
+            valueFrom:
+             secretKeyRef:
+               name: db-secret
+               key: password
