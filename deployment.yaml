@@ -33,3 +33,13 @@ spec:
              secretKeyRef:
                name: db-secret
                key: password
+          - name: APP_ENV
+            valueFrom:
+              configMapKeyRef:
+                name: app-config
+                key: APP_ENV
+          - name: APP_NAME
+            valueFrom:
+              configMapKeyRef:
+                name: app-config
+                key: APP_NAME
