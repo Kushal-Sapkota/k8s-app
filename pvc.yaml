@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: my-pvc-manual
+spec:
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: ""  #dynamic storageClass
+  resources:
+    requests:
+      storage: 500Mi
+  volumeName: my-pv   #volume name added
