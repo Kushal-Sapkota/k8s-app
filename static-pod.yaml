@@ -1,0 +1,11 @@
+# Static pod manifest that is placed inside the /etc/kubernetes/manifests directory of the (-minikube ssh)
+apiVersion: v1
+kind: Pod
+metadata:
+  name: static-pod
+spec:
+  containers:
+  - name: static-app
+    image: nginx
+    ports:
+    - containerPort: 80
