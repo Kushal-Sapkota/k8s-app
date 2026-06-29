@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hpa-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hpa-demo
+  template:
+    metadata:
+      labels:
+        app: hpa-demo
+    spec:
+      containers:
+      - name: hpa-demo
+        image: k8s.gcr.io/hpa-example
+        resources:
+          requests:
+            cpu: 100m
+          limits:
+            cpu: 200m
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hpa-demo-svc
+spec:
+  selector:
+    app: hpa-demo
+  ports:
+  - port: 80
+    targetPort: 80
+
+
+
+
+# 1. Verify metrics-server is running
+# kubectl get pods -n kube-system | grep metrics
+
+# 2. Create deployment + service file
+# nano hpa-deployment.yaml
+
+# 3. Apply it
+# kubectl apply -f hpa-deployment.yaml
+# kubectl get pods
+
+# 4. Create HPA targeting the deployment
+# kubectl autoscale deployment hpa-demo --cpu-percent=50 --min=1 --max=5
+
+# 5. Verify HPA created
+# kubectl get hpa
+
+# 6. Wait for metrics to populate
+# sleep 30
+# kubectl get hpa
+
+# 7. Generate load (separate terminal)
+# kubectl run -i --tty load-generator --rm --image=busybox --restart=Never -- /bin/sh -c "while true; do wget -q -O- http://hpa-demo-svc; done"
+
+# 8. Watch scale-up in real time
+# kubectl get hpa hpa-demo --watch
+
+# 9. Stop the load generator
+# kubectl delete pod load-generator
+
+# 10. Watch scale-down 
+# kubectl get hpa hpa-demo --watch
+
+# 11. Cleanup
+# kubectl delete hpa hpa-demo
+# kubectl delete deployment hpa-demo
+# kubectl delete service hpa-demo-svc
