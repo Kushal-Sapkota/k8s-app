@@ -23,30 +23,45 @@ spec:
         ports:
         - containerPort: 3000
         env:
-          - name: DB_USERNAME
-            valueFrom:
-              secretKeyRef:
-                name: db-secret
-                key: username
-          - name: DB_PASSWORD
-            valueFrom:
-             secretKeyRef:
-               name: db-secret
-               key: password
-          - name: APP_ENV
-            valueFrom:
-              configMapKeyRef:
-                name: app-config
-                key: APP_ENV
-          - name: APP_NAME
-            valueFrom:
-              configMapKeyRef:
-                name: app-config
-                key: APP_NAME
-      resources:
+        - name: DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: username
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: password
+        - name: APP_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: APP_ENV
+        - name: APP_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: app-config
+              key: APP_NAME
+        #Resources block added to comply with ResourceQuota
+        resources:
           requests:
             cpu: "100m"
             memory: "128Mi"
           limits:
             cpu: "200m"
             memory: "256Mi"
+        #Liveness probe added for container health checking
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        #Readiness probe added for container health checking
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 5
