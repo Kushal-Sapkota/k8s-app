@@ -10,3 +10,55 @@ spec:
     requests.memory: 2Gi
     limits.cpu: "4"
     limits.memory: 4Gi
+
+
+
+
+
+
+
+
+# 1. Create ResourceQuota in dev namespace
+# nano resourcequota.yaml
+# kubectl apply -f resourcequota.yaml
+# kubectl describe resourcequota dev-quota -n dev
+# Result: pods: 3/5 (existing pods already counted)
+
+# 2. Try scaling beyond quota
+# kubectl scale deployment cicd-app-deployment --replicas=10 -n dev
+# kubectl get pods -n dev
+# Result: Still showed 3 pods — new ones failed silently
+
+# 3.pods failed
+# kubectl get events -n dev --sort-by='.lastTimestamp' | tail -10
+# Result: must specify limits.cpu, limits.memory, requests.cpu, requests.memory
+
+# 4. Add resource requests/limits to deployment.yaml
+# nano deployment.yaml
+# # added resources: requests/limits block
+# kubectl apply -f deployment.yaml -n dev
+# kubectl scale deployment cicd-app-deployment --replicas=10 -n dev
+# kubectl get pods -n dev
+# Result: New pods created but stuck in CreateContainerConfigError
+
+# 5. Debugg the new error
+# kubectl describe pod cicd-app-deployment-8457b469c7-rvwnl -n dev | tail -20
+# Result: Error: secret "db-secret" not found
+
+# 6. Create Secret in dev namespace
+# kubectl apply -f secrets.yaml -n dev
+# kubectl get pods -n dev
+# Result: Still erroring — next dependency missing
+
+# 7. Debugg again
+# kubectl describe pod cicd-app-deployment-8457b469c7-kcpp9 -n dev | tail -10
+# Result: Error: configmap "app-config" not found
+
+# 8. Created ConfigMap in dev namespace
+# kubectl apply -f configmap.yaml -n dev
+# kubectl get pods -n dev
+# Result: All 5 pods Running 
+
+# 9. Verify quota enforcement
+# kubectl describe resourcequota dev-quota -n dev
+# Result: pods: 5/5 — quota correctly capped at 5, rest stayed Pending
