@@ -1,2 +1,14 @@
 secrets.yaml
 
+# Helm/package output
+*.tgz
+
+# Local editor or backup files
+*.save
+*.swp
+*.tmp
+*.bak
+
+# OS clutter
+.DS_Store
+
